@@ -39,6 +39,8 @@ Index of this file:
 #endif
 
 #include <stdio.h>      // vsnprintf, sscanf, printf
+#include <cstdlib>      // std::getenv
+#include <string>
 
 // Visual Studio warnings
 #ifdef _MSC_VER
@@ -436,6 +438,13 @@ void ImGui::StyleWin98(ImGuiStyle* dst)
     colors[ImGuiCol_NavWindowingHighlight]  = ImVec4(0.70f, 0.70f, 0.70f, 0.70f);
     colors[ImGuiCol_NavWindowingDimBg]      = ImVec4(0.20f, 0.20f, 0.20f, 0.20f);
     colors[ImGuiCol_ModalWindowDimBg]       = ImVec4(0.20f, 0.20f, 0.20f, 0.35f);
+    colors[ImGuiCol_TableHeaderBg]          = ImVec4(0.76f, 0.80f, 0.84f, 0.95f);
+    colors[ImGuiCol_TableRowBg]             = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+    colors[ImGuiCol_TableBorderStrong]      = ImVec4(0.57f, 0.57f, 0.64f, 1.00f);   // Prefer using Alpha=1.0 here
+    colors[ImGuiCol_TableBorderLight]       = ImVec4(0.68f, 0.68f, 0.74f, 1.00f);   // Prefer using Alpha=1.0 here
+    colors[ImGuiCol_TableRowBgAlt]          = ImVec4(0.30f, 0.30f, 0.30f, 0.09f);
+    colors[ImGuiCol_DockingPreview]         = colors[ImGuiCol_Header] * ImVec4(1.0f, 1.0f, 1.0f, 0.7f);
+    colors[ImGuiCol_DockingEmptyBg]         = ImVec4(0.30f, 0.30f, 0.30f, 1.00f);
 
 
     if (dst != NULL) return;
@@ -447,8 +456,11 @@ void ImGui::StyleWin98(ImGuiStyle* dst)
             return;
         }
     }
-    ImFont *font = io.Fonts->AddFontFromFileTTF("./MS Sans Serif.ttf", 12.0f, NULL, io.Fonts->GetGlyphRangesDefault());
-    io.Fonts->AddFontFromFileTTF("./MS Sans Serif Bold.ttf", 12.0f, NULL, io.Fonts->GetGlyphRangesDefault());
+
+    char* fp = std::getenv("IMGUI_FONTS_PATH");
+    std::string font_path = fp != nullptr ? fp : ".";
+    ImFont *font = io.Fonts->AddFontFromFileTTF((font_path + "/MS_Sans_Serif.ttf").c_str(), 12.0f, NULL, io.Fonts->GetGlyphRangesDefault());
+    io.Fonts->AddFontFromFileTTF((font_path + "/MS_Sans_Serif_Bold.ttf").c_str(), 12.0f, NULL, io.Fonts->GetGlyphRangesDefault());
 
     // Run-length encoding of some icons
     // In retrorespect I should have used an icon map like FONT_ATLAS_DEFAULT_TEX_DATA_PIXELS
